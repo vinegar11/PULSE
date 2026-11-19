@@ -1,32 +1,31 @@
-# PULSE
+# PULSE — объединённая версия
 
-PULSE is a browser-based social network starter connected to your Supabase project.
+Основа: полный приложенный PULSE-main, настоящая авторизация и данные Supabase сохранены.
+Из PULSE 2.0 перенесён визуальный стиль: пульсирующий знак, кнопки, карточки, акценты, адаптивность; добавлены локальная настройка темы, переход к созданию поста и предпросмотр фото.
 
-## Included
-- Email/password registration, login and logout
-- User profiles (display name and bio)
-- Post feed with text and photo uploads
-- Likes and comments
-- User directory and private one-to-one text messages
-- Realtime incoming-message refresh
-- Dark blue responsive interface
+## Что исправлено
+- У синих кнопок ограничены размеры SVG: 18 × 18. Иконка больше не может растянуть кнопку до встроенного размера SVG 300 × 150.
+- Кнопки выровнены через inline-flex; исправлен перенос текста и размещение в мобильном композере.
+- У публикации явно type=button, у входа type=submit.
+- Не добавлены второй Supabase-клиент, локальная авторизация и повторный обработчик публикации.
+- Новые версии CSS/JS имеют параметр версии для сброса кеша.
 
-## One-time Supabase setup
-1. Open your Supabase project: https://supabase.com/dashboard/project/dlgegrtgispausecewzs
-2. Open **SQL Editor** → **New query**.
-3. Open `supabase/schema.sql` from this project, copy its full contents into the query editor and press **Run**.
-4. In **Authentication → URL Configuration**, set your local/dev URL while testing (for example `http://localhost:5500`) and add your eventual published site URL to Redirect URLs.
-5. In **Authentication → Providers → Email**, choose whether email confirmation is required. If enabled, users must confirm their email before their first login.
+## Загрузка на GitHub
+1. Скачайте копию текущего репозитория для отката.
+2. Распакуйте архив. Внутри файлы лежат сразу в корне, без папки PULSE/PULSE.
+3. В репозитории vinegar11/PULSE откройте папку публикации (обычно корень ветки main).
+4. Add file → Upload files: замените index.html, app.js, style.css и добавьте .nojekyll. Документы можно добавить по желанию. Сам ZIP не загружайте.
+5. Не удаляйте существующие файлы конфигурации, SQL и .github. Файл supabase/schema.sql в архиве — копия ранее приложенной схемы; не запускайте SQL повторно ради изменения кнопок.
+6. Commit changes, дождитесь публикации в Actions и обновите https://vinegar11.github.io/PULSE/ с Ctrl+Shift+R. При прежних настройках Pages адрес сохранится.
 
-## Run locally
-Open the folder with a local static server (for example VS Code Live Server) and visit the shown localhost URL. Do not open `index.html` directly as a `file://` URL.
+## Supabase
+Сохранены URL и публичный publishable key из исходного проекта. Секретного service_role нет. Используется существующий SDK через CDN: сайт требует интернета. Подключения к внешним шрифтам удалены.
+Нужны существующие таблицы, Storage buckets и корректные RLS. Для историй требуются stories и story-images; включение этих объектов и очистка файлов по истечении 24 часов не выполняются этим обновлением.
+Не выполняйте схему вслепую на рабочем проекте. Публикация, вход, сообщения и загрузки требуют проверки с вашими тестовыми аккаунтами. Реальные данные в ходе сборки не изменялись.
 
-## Security
-The browser uses only the Supabase publishable key. Never put a Supabase secret/service-role key in this project or share it. Row Level Security policies are included in `supabase/schema.sql`.
+## Что не перенесено
+Автономная демоверсия PULSE 2.0 не подставлена вместо вашей рабочей соцсети. Её локальные аккаунты, локальные сообщества, видеотека и демонстрационные данные не объединены с серверными таблицами: для их настоящей интеграции нужны отдельные схема, RLS и API.
+Голосовые сообщения и переводы из другого приложенного варианта PULSE_app.js не включены: их DOM/SQL отсутствуют в выбранном PULSE-main.
 
-## Current scope
-This version includes working foundations for auth, feed, profiles, likes, comments, photo storage and text DMs. It does not yet include voice/video calls, stories, push notifications, group chats or moderation tools. It requires the one-time SQL setup above and an internet connection.
-
-
-## Stories
-Stories are enabled through the Supabase `stories` table and public Storage bucket `story-images`. Uploads are limited to 10 MB per image and expire from the feed after 24 hours. Run the Stories SQL setup in Supabase before using this feature.
+## Проверка
+См. BUILD-REPORT.json. Проверка внешней авторизации, политик Supabase, доставки сообщений и публикации GitHub не является частью статической сборки.

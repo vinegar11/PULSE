@@ -59,3 +59,28 @@ function messageHTML(m){return `<div class="message ${m.sender_id===user.id?"min
 async function refreshChat(id){if(activeChat!==id)return;const {data}=await client.from("messages").select("*").or(`and(sender_id.eq.${user.id},receiver_id.eq.${id}),and(sender_id.eq.${id},receiver_id.eq.${user.id})`).order("created_at");if($("chatMessages")){$("chatMessages").innerHTML=(data||[]).map(messageHTML).join("");$("chatMessages").scrollTop=$("chatMessages").scrollHeight}}
 function subscribeRealtime(){if(realtimeChannel)client.removeChannel(realtimeChannel);realtimeChannel=client.channel("pulse-live").on("postgres_changes",{event:"INSERT",schema:"public",table:"messages"},payload=>{const m=payload.new;if(m.sender_id===user.id||m.receiver_id===user.id){if(activeChat===m.sender_id||activeChat===m.receiver_id)refreshChat(activeChat);loadConversations();if(m.receiver_id===user.id) $("unreadDot").classList.remove("hidden")}}).on("postgres_changes",{event:"INSERT",schema:"public",table:"posts"},()=>{if(activePage==="feed")loadFeed()}).on("postgres_changes",{event:"INSERT",schema:"public",table:"stories"},()=>{if(activePage==="feed")loadStories()}).subscribe()}
 boot();
+
+
+/* PULSE visual integration. No second client, local auth, or duplicate publication handler. */
+(()=>{
+  const byId=id=>document.getElementById(id);
+  const themeButton=byId('pulseThemeBtn');
+  function setTheme(value){document.body.dataset.pulseTheme=value;themeButton?.setAttribute('aria-pressed',String(value==='light'));if(themeButton)themeButton.textContent=value==='light'?'☾':'☀'}
+  try{setTheme(localStorage.getItem('pulse-ui-theme')||'dark')}catch(_){setTheme('dark')}
+  themeButton?.addEventListener('click',()=>{const value=document.body.dataset.pulseTheme==='light'?'dark':'light';setTheme(value);try{localStorage.setItem('pulse-ui-theme',value)}catch(_){}});
+  byId('pulseComposeShortcut')?.addEventListener('click',()=>{if(typeof navigate==='function')navigate('feed');const input=byId('postText');input?.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'center'});input?.focus({preventScroll:true})});
+  document.querySelectorAll('.nav[data-page]').forEach(b=>b.setAttribute('aria-label',b.textContent.trim()));
+  const input=byId('postImage'), name=byId('imageName'), composer=document.querySelector('.composer');
+  if(input&&composer){
+    const preview=document.createElement('div');preview.className='pulse-photo-preview';preview.hidden=true;
+    const image=document.createElement('img');image.alt='Предпросмотр выбранного фото';
+    const remove=document.createElement('button');remove.type='button';remove.textContent='Убрать фото';preview.append(image,remove);composer.append(preview);
+    let url=null;
+    function clear(){if(url)URL.revokeObjectURL(url);url=null;image.removeAttribute('src');preview.hidden=true}
+    input.addEventListener('change',()=>{clear();const f=input.files[0];if(!f)return;if(!f.type.startsWith('image/')||f.size>8*1024*1024){input.value='';if(name)name.textContent='';if(typeof toast==='function')toast('Выбери изображение размером до 8 МБ.');return}url=URL.createObjectURL(f);image.src=url;preview.hidden=false});
+    remove.addEventListener('click',()=>{input.value='';if(name)name.textContent='';clear()});
+    // The original publisher clears the filename only after a successful insert.
+    if(name)new MutationObserver(()=>{if(!input.files.length)clear()}).observe(name,{childList:true,characterData:true,subtree:true});
+    window.addEventListener('pagehide',clear);
+  }
+})();

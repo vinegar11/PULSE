@@ -32,3 +32,27 @@
 }
 .post-image { margin-top: 12px; }
 img, video { max-width: 100%; }
+
+
+/* PULSE unified visual layer — keeps the original Supabase UI and IDs. */
+:root{--bg:#060b15;--panel:#0c1525;--panel2:#111f34;--line:#21344e;--blue:#3289ff;--cyan:#61e1ff;--text:#f1f7ff;--muted:#91a3be;color-scheme:dark}
+body{font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;background:var(--bg)}
+.brand{letter-spacing:.14em;gap:3px}.brand-mark.pulse-symbol{background:none;box-shadow:none;color:var(--cyan);width:36px;height:36px;flex:0 0 36px}
+.pulse-symbol svg{display:block;width:34px;height:34px;fill:none;stroke:currentColor;stroke-width:2.7;stroke-linecap:round;stroke-linejoin:round;filter:drop-shadow(0 0 5px #258dff80)}
+.primary{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:40px;height:auto;max-width:100%;padding:10px 17px;border:0;border-radius:11px;background:linear-gradient(135deg,#2078ff,#2cbbea);color:#fff;font-weight:750;font-size:13px;line-height:1.35;white-space:normal;vertical-align:middle;box-shadow:0 8px 22px #1675ff26;transition:box-shadow .2s,transform .2s}
+.primary:hover:not(:disabled){transform:translateY(-1px);box-shadow:0 12px 26px #1675ff40}.primary:disabled{cursor:wait;opacity:.6;transform:none}
+.primary svg{display:block!important;width:18px!important;height:18px!important;min-width:18px;max-width:18px;max-height:18px;flex:0 0 18px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.primary>[data-icon]{display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;flex:0 0 18px}.primary>span{flex-shrink:0}
+.compose-foot{gap:10px;flex-wrap:wrap}.compose-head textarea{min-width:0}.compose-foot #imageName{max-width:45%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}#publishBtn{flex:0 0 auto;margin-left:auto}
+.card{background:linear-gradient(145deg,#111d30,#0b1423);border-color:var(--line);box-shadow:0 18px 50px #0002}.top-actions{gap:10px}.topbar{align-items:center}
+.pulse-theme{display:grid;place-items:center;width:38px;height:38px;flex:0 0 38px;background:var(--panel);color:var(--text);border:1px solid var(--line);border-radius:11px;font-size:18px}
+.pulse-compose-shortcut{font-size:12px}.post-body{overflow-wrap:anywhere}.post-author{overflow-wrap:anywhere}.post-image{object-fit:contain;background:var(--bg)}.post-actions{flex-wrap:wrap;gap:12px}.story-viewer-card{isolation:isolate}.story-viewer-actions button{min-height:40px}
+button:focus-visible,a:focus-visible,input:focus-visible,textarea:focus-visible{outline:2px solid var(--cyan);outline-offset:3px}
+.pulse-photo-preview{margin:12px 0 0;display:flex;align-items:center;gap:10px}.pulse-photo-preview[hidden]{display:none}.pulse-photo-preview img{width:76px;height:76px;object-fit:cover;border-radius:10px;border:1px solid var(--line)}.pulse-photo-preview button{border:1px solid var(--line);background:transparent;color:var(--text);border-radius:9px;padding:8px 12px;font-size:12px}
+body[data-pulse-theme="light"]{--bg:#eef4fc;--panel:#fff;--panel2:#f1f6fd;--line:#cfdaea;--text:#132238;--muted:#5d728d;color-scheme:light}
+body[data-pulse-theme="light"] .card,body[data-pulse-theme="light"] .right-card,body[data-pulse-theme="light"] .auth-card,body[data-pulse-theme="light"] .sidebar{background:#fff;color:var(--text);border-color:var(--line)}
+body[data-pulse-theme="light"] .ambient{opacity:.15}body[data-pulse-theme="light"] .muted,body[data-pulse-theme="light"] .post-time,body[data-pulse-theme="light"] .right-card p{color:var(--muted)}
+body[data-pulse-theme="light"] input,body[data-pulse-theme="light"] textarea{background:var(--panel2);color:var(--text);border-color:var(--line)}body[data-pulse-theme="light"] .nav{color:#5d728d}body[data-pulse-theme="light"] .nav.active{color:#1266d1;background:#e9f2ff}body[data-pulse-theme="light"] .profile-content{color:var(--text)}
+@media(max-width:900px){.pulse-compose-shortcut{display:none}.top-actions{gap:7px}}
+@media(max-width:600px){.topbar{gap:8px}.compose-foot #imageName{max-width:35%}#publishBtn{padding:10px 13px}.post-actions .action{min-height:36px}.pulse-theme{width:34px;height:34px;flex-basis:34px}.story-viewer-card{width:min(430px,100%)}.story-viewer-actions{gap:8px}.story-viewer-actions .primary{padding:10px 14px}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
